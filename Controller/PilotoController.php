@@ -6,9 +6,7 @@ class PilotoController
 {
     public static function index()
     {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
+        
 
         include 'Model/PilotoModel.php';
 
@@ -16,7 +14,7 @@ class PilotoController
         $piloto->getAllRows();
         //print_r($piloto);
         //die(); 
-        $title="Lista de Pilotos";
+        $title = "Lista de Pilotos";
         $page = 'View/modulos/Piloto/ListaPiloto.php';
         include 'View/layout/topo.php';
         // include 'View/modulos/Piloto/ListaPiloto.php'; // Include da View, propriedade $rows da Model pode ser acessada na View
@@ -24,20 +22,21 @@ class PilotoController
     }
     public static function form()
     {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-        include 'Model/PilotoModel.php';
+        include 'Model/PilotoModel.php';       
+        Helper::limpaForm();
+       
+
         $piloto = new PilotoModel();
 
-        if (isset($_GET['id']))
-            $piloto = $piloto->getById((int) $_GET['id']);
-        //include 'View/modulos/Piloto/FormPiloto.php'; 
+        if (isset($_GET['id'])){
+            $piloto = $piloto->getById((int) $_GET['id']);   
+          
+        }
         $title = 'Cadastro';
         $page = 'View/modulos/Piloto/FormPiloto.php';
         include 'View/layout/topo.php';
     }
-    
+
     public static function save()
     {
         include 'Model/PilotoModel.php'; // inclusão do arquivo model.
@@ -47,6 +46,8 @@ class PilotoController
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
+
+        $_SESSION['piloto_form'] = $_POST;
 
         $piloto = new PilotoModel();
         $piloto->id =  $_POST['id'];
@@ -58,21 +59,23 @@ class PilotoController
 
         if (Validacao::validarTexto($nome, 3, 50)) {
             $piloto->nome = $nome;
-            print_r("erro");
+            
         } else {
-            Helper::setMessagem("danger","Nome inválido");
+            Helper::setMessagem("danger", "Nome inválido");
             $erro = 1;
         }
         if (Validacao::validarTexto($sobrenome, 3, 50)) {
             $piloto->sobrenome = $sobrenome;
+          
         } else {
-            Helper::setMessagem("danger","Sobreome inválido");
+            Helper::setMessagem("danger", "Sobreome inválido");
             $erro = 1;
         }
         if (Validacao::validarTexto($equipe, 3, 50)) {
             $piloto->equipe = $equipe;
+        
         } else {
-            Helper::setMessagem("danger","Nome da equipe está inválido");
+            Helper::setMessagem("danger", "Nome da equipe está inválido");
             $erro = 1;
         }
         /*
@@ -83,9 +86,12 @@ class PilotoController
        $piloto->save(); 
        */
         if ($erro == 0) {
+           Helper::limpaForm();
             $piloto->save();
+            
             header("Location: /piloto");
         } else {
+
             header("Location: /piloto/form");
         }
     }
@@ -97,6 +103,7 @@ class PilotoController
         $model = new PilotoModel();
 
         $model->delete((int) $_GET['id']);
+        
         header("Location: /piloto");
     }
 }
