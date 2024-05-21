@@ -1,5 +1,5 @@
 <?php
-class ControllerGeral{
+class GeralController{
     public static function index(){
         
         $title = "Home";

@@ -1,5 +1,5 @@
 <?php
-//include "View/layout/topo.php"
+
 ?>  
 <div class="container">
 <form action="/piloto/form/save" method="POST">
@@ -14,6 +14,12 @@
         <input type="submit" name="cadastrarPais" class="btn btn-primary" value="Salvar"></input>
     </div>
 </form>
+</div>
+<div bg bg-color-danger>
+    <?php
+    include_once 'Util/HelperUtil.php';
+        echo Helper::getMessagem();
+    ?>
 </div>
 <?php
 //$pagina = 'View/modulos/Piloto/FormPiloto.php';/
